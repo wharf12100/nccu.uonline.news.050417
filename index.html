@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>跨國銜轉的教育擺渡人 - 互動困境模擬</title>
+    <title>跨國銜轉教育擺渡人：制度困境模擬</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -11,13 +11,12 @@
         
         body {
             font-family: 'Noto Sans TC', sans-serif;
-            background-color: #f8fafc;
-            color: #334155;
-            overflow-x: hidden;
-            transition: background-color 0.5s ease;
+            background-color: #f1f5f9;
+            color: #1e293b;
+            transition: background-color 0.4s ease;
         }
 
-        /* 閃紅燈警告特效 */
+        /* 制度性警示特效 (30% 觸發) */
         .danger-overlay {
             position: fixed;
             top: 0;
@@ -26,270 +25,274 @@
             height: 100vh;
             pointer-events: none;
             z-index: 50;
-            box-shadow: inset 0 0 60px rgba(239, 68, 68, 0);
-            transition: box-shadow 0.5s ease;
+            box-shadow: inset 0 0 0px rgba(220, 38, 38, 0);
+            transition: box-shadow 0.3s ease;
         }
 
         .is-danger .danger-overlay {
-            animation: pulse-red 1.5s infinite;
+            animation: pulse-danger 1.2s infinite;
         }
 
-        @keyframes pulse-red {
-            0% { box-shadow: inset 0 0 20px rgba(239, 68, 68, 0); }
-            50% { box-shadow: inset 0 0 100px rgba(239, 68, 68, 0.6); }
-            100% { box-shadow: inset 0 0 20px rgba(239, 68, 68, 0); }
+        @keyframes pulse-danger {
+            0% { box-shadow: inset 0 0 30px rgba(220, 38, 38, 0.1); }
+            50% { box-shadow: inset 0 0 100px rgba(220, 38, 38, 0.5); }
+            100% { box-shadow: inset 0 0 30px rgba(220, 38, 38, 0.1); }
         }
 
         .status-bar {
-            transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .card-enter {
-            animation: slideUp 0.6s ease-out;
+        .is-danger .stat-low {
+            animation: alert-shake 0.4s infinite;
+            border: 2px solid #ef4444 !important;
         }
 
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes alert-shake {
+            0% { transform: translate(0,0); }
+            25% { transform: translate(2px,0); }
+            75% { transform: translate(-2px,0); }
         }
 
         .stat-card {
             background: white;
-            border-radius: 1.25rem;
-            padding: 1rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border-radius: 1rem;
+            padding: 0.85rem;
             border: 1px solid #e2e8f0;
-            transition: all 0.3s ease;
-        }
-
-        .is-danger .stat-low {
-            animation: shake 0.5s infinite;
-            border-color: #ef4444;
-            background-color: #fef2f2;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-2px); }
-            75% { transform: translateX(2px); }
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
         .option-btn {
-            transition: all 0.2s ease;
-            border: 2px solid #f1f5f9;
+            text-align: left;
+            padding: 1.15rem;
+            border-radius: 0.75rem;
+            background: white;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
         }
 
         .option-btn:hover {
-            border-color: #10b981;
-            background-color: #f0fdf4;
-            transform: translateX(4px);
+            border-color: #334155;
+            background-color: #f8fafc;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
         }
 
         .scenario-header {
-            background: linear-gradient(135deg, #065f46 0%, #059669 100%);
+            background: #1e293b;
+            color: white;
         }
 
         .is-danger .scenario-header {
-            background: linear-gradient(135deg, #991b1b 0%, #ef4444 100%);
+            background: #991b1b;
         }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
 
-    <!-- 警示遮罩層 -->
     <div id="danger-overlay" class="danger-overlay"></div>
 
     <div id="game-container" class="max-w-4xl w-full relative z-10">
         <!-- Start Screen -->
-        <div id="start-screen" class="bg-white rounded-3xl shadow-2xl p-8 md:p-16 text-center card-enter">
-            <div class="mb-8 inline-block p-6 bg-emerald-100 rounded-full text-emerald-600 text-6xl">
-                <i class="fas fa-bridge-circle-exclamation"></i>
+        <div id="start-screen" class="bg-white rounded-2xl shadow-xl p-8 md:p-12 text-center">
+            <h1 class="text-3xl font-bold mb-6 text-slate-800">跨國銜轉教育擺渡人：制度困境模擬</h1>
+            <div class="text-left bg-slate-50 p-6 rounded-xl mb-8 border-l-4 border-slate-500 text-slate-600 leading-relaxed">
+                你受聘為外聘「教學支援人員」，負責銜轉學生的隨班翻譯與生活調適。<br>
+                在這個模擬中，你將面對<strong> 10 個具體的制度性挑戰</strong>。資源是有限的，你必須在「體力」、「情緒」、「經濟」與「專業認同」間做出取捨。<br><br>
+                <span class="text-red-600 font-bold">※ 注意：當任何數值低於 30%，畫面將閃爍紅燈警告，代表你已處於制度性崩潰邊緣。</span>
             </div>
-            <h1 class="text-4xl font-bold mb-6 text-gray-800 tracking-tight">跨國銜轉的教育擺渡人</h1>
-            <div class="text-left bg-slate-50 p-8 rounded-2xl mb-10 border-l-8 border-emerald-500 shadow-inner">
-                <p class="text-gray-700 leading-relaxed text-lg">
-                    你是一位擁有東南亞血緣背景的扶助教師。你是一座沒有終點站的橋樑，始終在體制邊緣徘徊。<br><br>
-                    <span class="font-bold text-orange-600">● 奔波的體力</span>、<span class="font-bold text-red-600">● 情緒的磨損</span>、<span class="font-bold text-green-600">● 微薄的收入</span>、<span class="font-bold text-blue-600">● 職業的天花板</span>。<br><br>
-                    當任何數值低於 <span class="text-red-600 font-bold">20%</span> 時，世界將開始崩解。你能撐過這個學期嗎？
-                </p>
-            </div>
-            <button onclick="startGame()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-5 px-16 rounded-full transition duration-300 shadow-xl transform hover:scale-105 text-xl tracking-widest">
-                開始接案人生
+            <button onclick="startGame()" class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-4 px-12 rounded-lg transition transform hover:scale-105">
+                進入模擬
             </button>
         </div>
 
-        <!-- Main Game UI -->
-        <div id="game-ui" class="hidden space-y-6">
-            <!-- Status Panel - 4 Dimensions -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sticky top-4 z-20">
+        <!-- Main Game -->
+        <div id="game-ui" class="hidden space-y-4">
+            <!-- Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sticky top-4 z-20">
                 <div id="card-time" class="stat-card">
-                    <div class="flex justify-between mb-2 text-sm font-bold text-orange-600">
-                        <span><i class="fas fa-motorcycle mr-1"></i> 體力</span>
+                    <div class="flex justify-between mb-1 text-xs font-bold text-orange-600">
+                        <span><i class="fas fa-clock mr-1"></i> 體力/時間</span>
                         <span id="stat-time-val">100%</span>
                     </div>
-                    <div class="w-full bg-slate-100 rounded-full h-3">
-                        <div id="stat-time-bar" class="status-bar bg-orange-500 h-3 rounded-full" style="width: 100%"></div>
+                    <div class="w-full bg-slate-100 rounded-full h-2">
+                        <div id="stat-time-bar" class="status-bar bg-orange-500 h-2 rounded-full" style="width: 100%"></div>
                     </div>
                 </div>
                 <div id="card-mental" class="stat-card">
-                    <div class="flex justify-between mb-2 text-sm font-bold text-red-600">
-                        <span><i class="fas fa-heart-pulse mr-1"></i> 情緒</span>
+                    <div class="flex justify-between mb-1 text-xs font-bold text-red-600">
+                        <span><i class="fas fa-brain mr-1"></i> 情緒負荷</span>
                         <span id="stat-mental-val">100%</span>
                     </div>
-                    <div class="w-full bg-slate-100 rounded-full h-3">
-                        <div id="stat-mental-bar" class="status-bar bg-red-500 h-3 rounded-full" style="width: 100%"></div>
+                    <div class="w-full bg-slate-100 rounded-full h-2">
+                        <div id="stat-mental-bar" class="status-bar bg-red-500 h-2 rounded-full" style="width: 100%"></div>
                     </div>
                 </div>
                 <div id="card-money" class="stat-card">
-                    <div class="flex justify-between mb-2 text-sm font-bold text-green-600">
-                        <span><i class="fas fa-wallet mr-1"></i> 經濟</span>
+                    <div class="flex justify-between mb-1 text-xs font-bold text-green-600">
+                        <span><i class="fas fa-coins mr-1"></i> 經濟穩定</span>
                         <span id="stat-money-val">100%</span>
                     </div>
-                    <div class="w-full bg-slate-100 rounded-full h-3">
-                        <div id="stat-money-bar" class="status-bar bg-green-500 h-3 rounded-full" style="width: 100%"></div>
+                    <div class="w-full bg-slate-100 rounded-full h-2">
+                        <div id="stat-money-bar" class="status-bar bg-green-500 h-2 rounded-full" style="width: 100%"></div>
                     </div>
                 </div>
                 <div id="card-growth" class="stat-card">
-                    <div class="flex justify-between mb-2 text-sm font-bold text-blue-600">
-                        <span><i class="fas fa-arrow-up-right-dots mr-1"></i> 認同</span>
+                    <div class="flex justify-between mb-1 text-xs font-bold text-blue-600">
+                        <span><i class="fas fa-id-card mr-1"></i> 專業認同</span>
                         <span id="stat-growth-val">100%</span>
                     </div>
-                    <div class="w-full bg-slate-100 rounded-full h-3">
-                        <div id="stat-growth-bar" class="status-bar bg-blue-500 h-3 rounded-full" style="width: 100%"></div>
+                    <div class="w-full bg-slate-100 rounded-full h-2">
+                        <div id="stat-growth-bar" class="status-bar bg-blue-500 h-2 rounded-full" style="width: 100%"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Scenario Card -->
-            <div id="scenario-card" class="bg-white rounded-3xl shadow-2xl overflow-hidden card-enter border border-slate-200">
-                <div id="scenario-header-box" class="scenario-header p-8 text-white flex items-center space-x-6 transition-colors duration-500">
-                    <div id="scenario-icon" class="text-5xl opacity-80"></div>
+            <!-- Scenario -->
+            <div id="scenario-card" class="bg-white rounded-2xl shadow-lg overflow-hidden border border-slate-200">
+                <div id="scenario-header-box" class="scenario-header p-6 flex items-center justify-between">
                     <div>
-                        <div class="text-white text-xs font-bold tracking-widest mb-1 opacity-70 uppercase">學期階段 <span id="current-stage">1</span> / 8</div>
-                        <h2 id="scenario-title" class="text-2xl font-bold"></h2>
+                        <span class="text-xs font-bold opacity-75 uppercase tracking-wider">Scenario <span id="current-stage">1</span> / 10</span>
+                        <h2 id="scenario-title" class="text-xl font-bold mt-1"></h2>
                     </div>
+                    <div id="scenario-icon" class="text-3xl opacity-50"></div>
                 </div>
-                <div class="p-8 md:p-10">
-                    <p id="scenario-desc" class="text-gray-700 mb-10 leading-relaxed text-xl"></p>
-                    <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <!-- Options injected here -->
-                    </div>
+                <div class="p-6">
+                    <div id="scenario-desc" class="text-slate-600 mb-8 leading-relaxed text-lg"></div>
+                    <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Result Screen -->
-        <div id="result-screen" class="hidden bg-white rounded-3xl shadow-2xl p-12 text-center card-enter">
-            <div id="result-icon" class="text-8xl mb-8"></div>
-            <h2 id="result-title" class="text-4xl font-bold mb-6 text-slate-800"></h2>
-            <p id="result-desc" class="text-gray-600 mb-10 leading-relaxed text-xl max-w-2xl mx-auto"></p>
-            <div id="result-stats" class="mb-10 text-left grid grid-cols-2 md:grid-cols-4 gap-4"></div>
-            <button onclick="location.reload()" class="bg-slate-800 hover:bg-black text-white font-bold py-5 px-16 rounded-full transition shadow-2xl text-lg">
-                重新進入現場
-            </button>
+        <!-- Result -->
+        <div id="result-screen" class="hidden bg-white rounded-2xl shadow-xl p-10 text-center">
+            <div id="result-icon" class="text-6xl mb-4"></div>
+            <h2 id="result-title" class="text-3xl font-bold mb-4"></h2>
+            <p id="result-desc" class="text-slate-600 mb-8 max-w-xl mx-auto"></p>
+            <div id="result-stats" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8"></div>
+            <button onclick="location.reload()" class="bg-slate-800 text-white px-8 py-3 rounded-lg font-bold">重新評估人生</button>
         </div>
     </div>
 
     <script>
-        const stats = {
-            time: 100,
-            mental: 100,
-            money: 100,
-            growth: 100
-        };
+        const stats = { time: 100, mental: 100, money: 100, growth: 100 };
+        let currentStage = 0;
 
         const stages = [
             {
-                title: "學期初的排課焦慮",
-                desc: "雖然你有母語優勢，但在校園裡你只是「鐘點教學支援人員」。薪水按件計酬，若想維持生活，你必須在各區接案。",
-                icon: "<i class='fas fa-calendar-check'></i>",
+                title: "破碎鐘點下的跨校奔波",
+                desc: "開學了，你為了湊齊每個月三萬元的收入，接下橫跨三個行政區的四間學校。制度規定外聘鐘點費已內含勞保自付額且無交通費補貼，且學校間的排課僅有 15 分鐘空檔。",
+                icon: "🏍️",
                 options: [
-                    { text: "全力衝刺：跨三區接滿 22 堂課。", impact: { time: -35, money: 20, growth: -15, mental: -10 }, feedback: "你確保了收入，但每天在公路上與時間賽跑，讓你開始懷疑工作的價值。" },
-                    { text: "平衡考量：只接鄰近區 15 堂課。", impact: { time: -15, money: -10, growth: 10, mental: 5 }, feedback: "比較從容，但你深刻感受到「鐘點身分」在扣掉保費後的經濟脆弱。" },
-                    { text: "尋求兼職：接少量課，晚上翻譯社打工。", impact: { time: -25, money: 25, growth: -20, mental: -5 }, feedback: "翻譯社薪水更高，你漸漸覺得校園教學只是某種「兼差」。" },
-                    { text: "深耕教學：只接 8 堂，自編教材求認同。", impact: { time: -5, money: -35, growth: 25, mental: 0 }, feedback: "雖然這無法讓你考上正職，但你希望專業能被看見。" }
+                    { text: "準時赴課：無視交通安全加速趕場，確保鐘點不被扣薪。", impact: { time: -20, money: -5, mental: -15, growth: 0 }, feedback: "你維持了收入，但長期趕路的高壓讓你心力交瘁。" },
+                    { text: "協調課表：請求學校調整時間，但因行政繁瑣被婉拒。", impact: { time: -10, money: 0, mental: -10, growth: -10 }, feedback: "協商失敗，你感到體制對非編制人員的冷漠。" },
+                    { text: "忍痛退案：放棄偏遠學校，雖減少時間壓力但收入驟減。", impact: { time: 0, money: -35, mental: 5, growth: -5 }, feedback: "經濟壓力瞬間變大，你必須思考晚上是否要跑外送補貼。" },
+                    { text: "縮減用餐：犧牲午餐時間趕路，利用紅燈時吃口麵包。", impact: { time: -15, money: 0, mental: -20, growth: 0 }, feedback: "長期胃痛與疲勞感，讓你開始懷疑這份工作的意義。" }
                 ]
             },
             {
-                title: "同鄉家長的求救信",
-                desc: "學生的越南籍媽媽在工廠受傷，因語言不通不敢就醫。這不是教學工作，但你是她唯一能求助的人。",
-                icon: "<i class='fas fa-briefcase-medical'></i>",
+                title: "暑期零收入的經濟寒冬",
+                desc: "學校進入兩個月的暑假，隨班翻譯並無薪資與勞保，下學期是否續聘需等各校開學前才確定。你的儲蓄有限，而租屋處的合約仍需照付。",
+                icon: "💸",
                 options: [
-                    { text: "熱血支援：請假一天陪同就醫。", impact: { time: -25, mental: -10, growth: -5, money: -10 }, feedback: "家長感激，但你因缺課被校方微詞：『外聘老師請假很麻煩』。" },
-                    { text: "限時協助：午休翻譯，引介社福。", impact: { time: -10, mental: -5, growth: 0, money: 0 }, feedback: "你完成了對家長的交代，也守住了本職工作的底線。" },
-                    { text: "專業切割：告知不在教學範圍內。", impact: { time: 0, mental: -25, growth: -10, money: 0 }, feedback: "雖然省下時間，但「自己人都不幫」的罪惡感嚴重侵蝕你的內心。" },
-                    { text: "社群動員：在同鄉社團徵求志工。", impact: { time: -15, mental: 10, growth: 15, money: 0 }, feedback: "你建立了互助網，讓自己不再只是個體勞工，而是社群連結者。" }
+                    { text: "跨行兼職：全職投入餐廳或大賣場打工，換取生活費。", impact: { time: -30, money: 25, mental: -15, growth: -20 }, feedback: "收入穩住了，但你逐漸失去教學者的專業敏銳度。" },
+                    { text: "自費進修：報名母語與銜轉師研習，爭取未來加薪可能。", impact: { time: -10, money: -40, mental: -10, growth: 35 }, feedback: "專業提升了，但戶頭餘額讓你在深夜感到恐慌。" },
+                    { text: "搬回老家：為節省開銷退租，下學期再重新找租屋處。", impact: { time: -15, money: 15, mental: -20, growth: -10 }, feedback: "經濟負擔減輕，但漂泊感讓你對這份職業感到倦怠。" },
+                    { text: "借貸度日：依賴信用卡或向親友借支，等待開學發薪。", impact: { time: 0, money: -15, mental: -30, growth: 0 }, feedback: "龐大的財務焦慮感，使你在接下來的教學中難以專注。" }
                 ]
             },
             {
-                title: "研習活動的排除感",
-                desc: "教育局辦理增能研習，但規定只給編制內教師參加，外聘教支人員無補貼。你感覺被排斥在體制外。",
-                icon: "<i class='fas fa-award'></i>",
+                title: "隱形的非教學輔導勞動",
+                desc: "一名銜轉生家長因身分證過期遭雇主刁難，學生的日常情緒極度不穩。校方輔導室請求你協助「幫忙翻譯公文」並「私下家訪」處理生活問題。",
+                icon: "💬",
                 options: [
-                    { text: "自費參與：自行請假自費搭車參加。", impact: { time: -10, money: -20, growth: 25, mental: -10 }, feedback: "你學到了專業，但體制的拒絕感讓你在研習現場感到非常孤單。" },
-                    { text: "職場生存：不去研習，照常上課領錢。", impact: { time: -5, money: 5, growth: -15, mental: -5 }, feedback: "你保住了收入，但也默認了自己只是個體制外的「翻譯工人」。" },
-                    { text: "主動串聯：找其他教支老師組成讀書會。", impact: { time: -15, mental: 15, growth: 20, money: 0 }, feedback: "你們決定不靠體制。這種同儕支持讓你重新找回認同。" },
-                    { text: "放棄精進：認清現況，教完就走人。", impact: { time: 0, money: 0, growth: -30, mental: -5 }, feedback: "心冷了，你開始覺得學再多也無法改變身分，何必呢？" }
+                    { text: "全力介入：花費週末時間無償家訪，並代為翻譯繁瑣文件。", impact: { time: -30, money: -5, mental: -15, growth: 25 }, feedback: "家長感激你，但這類工作完全不計入你的薪資紀錄。" },
+                    { text: "有限協助：僅在下課時間簡易解說，拒絕課外時間介入。", impact: { time: -5, money: 0, mental: -10, growth: -5 }, feedback: "維持了私人時間，但看著學生在校哭鬧讓你感到愧疚。" },
+                    { text: "拒絕要求：告知校長這非教學範疇，請校方另找社工。", impact: { time: 0, money: 0, mental: -25, growth: -15 }, feedback: "校方不再找你幫忙，但你感覺自己被排除在輔導體系外。" },
+                    { text: "尋求分担：聯絡民間移工團體協助，但需花費大量聯繫成本。", impact: { time: -20, money: 0, mental: -10, growth: 10 }, feedback: "找到了專業資源，但轉介過程的文書工作仍壓在你身上。" }
                 ]
             },
             {
-                title: "教材在地化的重擔",
-                desc: "校方沒有提供專屬教材，你得針對學生的母語特徵手寫教案。這耗費心力卻無任何津貼。",
-                icon: "<i class='fas fa-file-pen'></i>",
+                title: "隨班翻譯需求的突發變動",
+                desc: "學期中，原本你隨班輔導的學生因搬家轉學，校方通知下週起該學生的翻譯時數取消。由於你是按時給薪，月收入立刻減少了 8,000 元且無補償。",
+                icon: "📉",
                 options: [
-                    { text: "完美主義：每週熬夜三天開發教材。", impact: { time: -30, mental: 10, growth: 20, money: 0 }, feedback: "學生進步明顯，但你發現這份心血在系統裡根本不算考績。" },
-                    { text: "務實整合：剪貼網路資源，快速出爐。", impact: { time: -10, mental: -5, growth: -10, money: 0 }, feedback: "教學效果普通，但你明白沒人會因為你寫得好而幫你轉正。" },
-                    { text: "要求支薪：向學校反映教材製作應計費。", impact: { time: -5, mental: -30, growth: 0, money: 0 }, feedback: "主任表示沒預算，並暗示「如果不願意，還有別人排隊」。" },
-                    { text: "照本宣科：完全使用官方中文課本。", impact: { time: 0, mental: -20, growth: -25, money: 0 }, feedback: "你看著孩子眼神中的迷惘，痛苦地意識到自己正成為體制的共犯。" }
+                    { text: "立刻求職：尋找其他學校或私人翻譯缺額，不管內容是否專業。", impact: { time: -15, money: -10, mental: -20, growth: -20 }, feedback: "為了生存，你只能放棄原本專業的教學品質。" },
+                    { text: "默默接受：減少生活開銷，把更多精力放回剩餘校區。", impact: { time: -5, money: -35, mental: -10, growth: 0 }, feedback: "生活品質大幅滑落，你深刻感受到自己只是個計件工。" },
+                    { text: "主動開發：自薦到更多社福機構或法院翻譯，增加收入來源。", impact: { time: -25, money: -5, mental: -15, growth: 10 }, feedback: "工作量增加但總收入不變，且單點薪酬更低。" },
+                    { text: "減少開支：退掉不必要的保險或訂閱，進入極簡生存模式。", impact: { time: 0, money: -30, mental: -25, growth: 0 }, feedback: "焦慮感與日俱增，你對未來的安全感正在瓦解。" }
                 ]
             },
             {
-                title: "交通意外與脆弱性",
-                desc: "在趕課路上機車拋錨。維修費是你三天的鐘點費，且你處於無勞保保障的狀態。",
-                icon: "<i class='fas fa-tools'></i>",
+                title: "生活突發與零保障的衝突",
+                desc: "學生半夜急診，單親媽媽不懂醫護溝通，絕望地打電話給你求救。你隔天早上在另一校有一堂關鍵的隨班示範課，且你沒有調課權限。",
+                icon: "🚑",
                 options: [
-                    { text: "忍痛維修：立刻叫修並搭車趕課。", impact: { time: -10, money: -35, growth: 0, mental: -10 }, feedback: "你保住了專業形象，但本月的生存壓力讓你晚上失眠。" },
-                    { text: "放棄該節：聯絡學校取消，推車去修。", impact: { time: -25, money: -15, growth: -10, mental: -5 }, feedback: "少了鐘點費又被記點，你深感勞動條件的不堪。" },
-                    { text: "忍受不便：改搭耗時 2 小時的公車。", impact: { time: -40, money: 0, growth: -10, mental: -20 }, feedback: "金錢保住了，但長途候車與體力透支讓你整個人變得極度易怒。" },
-                    { text: "轉向社群：求助同鄉會低價讓機車。", impact: { time: -15, money: -10, mental: 15, growth: 5 }, feedback: "同鄉伸出援手，你再次體會到體制外社群才是你的真實支柱。" }
+                    { text: "現場支援：連夜趕往急診室翻譯，整晚未眠。", impact: { time: -35, mental: -20, money: -5, growth: 25 }, feedback: "救了學生的急，但隔天示範課你因精神渙散表現不佳。" },
+                    { text: "線上翻譯：在家通話協助至天亮，勉強維持休息。", impact: { time: -15, money: 0, mental: -25, growth: 10 }, feedback: "兩邊都顧到了，但長期處於這種待命狀態讓你心律不整。" },
+                    { text: "公事公辦：建議對方撥打 1955 諮詢，婉拒私下服務。", impact: { time: 0, money: 0, mental: -35, growth: -20 }, feedback: "保護了專業界線，但學生家庭的困境成為你內心的重擔。" },
+                    { text: "聯絡代課：尋找其他支援人員代課，但需自付其薪資。", impact: { time: -5, money: -15, mental: -10, growth: 0 }, feedback: "暫時緩解了衝突，但讓你在本就微薄的薪水中又失血。" }
                 ]
             },
             {
-                title: "校園角色的邊緣化",
-                desc: "學校開會討論學生問題卻沒通知你。事後要你依照他們的決定執行。",
-                icon: "<i class='fas fa-users-slash'></i>",
+                title: "校園環境的差別待遇",
+                desc: "學校辦理歲末聚餐，雖然你每天在校協助隨班翻譯，但你被告知：『聚餐僅限編制內職員，外聘人員若參加需全額自費。』",
+                icon: "🍽️",
                 options: [
-                    { text: "隱忍配合：默默按照指示教課。", impact: { time: 0, mental: -20, growth: -25, money: 0 }, feedback: "你保住了飯碗，但感覺自己只是一個隨時被替換的螺絲釘。" },
-                    { text: "爭取話語：主動找主任溝通觀察。", impact: { time: -10, mental: -35, growth: 10, money: 0 }, feedback: "雖然你有理，但在正式會議上被冷落的感覺讓你感到羞辱。" },
-                    { text: "專注學生：直接與班導師建立私交。", impact: { time: -15, mental: 5, growth: 15, money: 0 }, feedback: "雖然繞過體制，但直接幫助到孩子的成就感讓你撐了下來。" },
-                    { text: "冷處理：時間到就走，不介入。", impact: { time: 5, mental: 5, growth: -20, money: 0 }, feedback: "你保住了情緒，但你與這間學校的連結已經徹底斷裂。" }
+                    { text: "全額自費：為了維持行政關係以便續聘，花錢參加。", impact: { time: -5, money: -25, mental: -15, growth: 10 }, feedback: "餐桌上大家討論職缺穩定度，你只能尷尬賠笑。" },
+                    { text: "安靜離開：在聚餐時間獨自到便利商店吃御飯糰。", impact: { time: 5, money: 0, mental: -30, growth: -15 }, feedback: "省了錢，但那種「被制度當透明人」的感覺極難受。" },
+                    { text: "主動提早：以「有兼課」為藉口先行離校，躲避尷尬。", impact: { time: 5, money: 0, mental: -20, growth: -5 }, feedback: "逃避了現場，但你對這間學校的歸屬感徹底消失。" },
+                    { text: "自嘲面對：與同樣是外聘的母語師私下小聚取暖。", impact: { time: -10, money: -10, mental: 10, growth: 5 }, feedback: "同儕的陪伴是唯一的慰藉，但對現況仍無實質幫助。" }
                 ]
             },
             {
-                title: "二代身分的心理折耗",
-                desc: "一名孩子因為不願承認自己是二代而哭泣。你彷彿看見過去的自己。",
-                icon: "<i class='fas fa-language'></i>",
+                title: "交通意外與保險漏洞",
+                desc: "在跨校教課的趕路途中，你與機車發生輕微擦撞。外聘人員的勞保並不包含「通勤傷害補助」，你需支付兩萬元修車費，且無法申請公假療養。",
+                icon: "🤕",
                 options: [
-                    { text: "誠實分享：告訴他現實很難。", impact: { time: -10, mental: -30, growth: 15, money: 0 }, feedback: "這是一場靈魂的掏洗，你們都哭了，但你感到能量極速耗盡。" },
-                    { text: "正向激勵：鼓勵他學好母語未來。", impact: { time: -5, mental: -10, growth: -10, money: 0 }, feedback: "雖然是標準答案，但你自己也知道這在目前的體制內談何容易。" },
-                    { text: "尋求外援：引進二代培力組織。", impact: { time: -20, mental: 10, growth: 20, money: 0 }, feedback: "透過集體力量，孩子看到了更多可能，你也感到了專業的擴張。" },
-                    { text: "壓抑情緒：叫他寫完練習單。", impact: { time: 0, mental: -20, growth: -30, money: 0 }, feedback: "你選擇了最冷酷的方式，因為你已無力承擔更多學生的痛苦。" }
+                    { text: "帶傷上課：不請假以保住全勤績效，維持稀少收入。", impact: { time: -25, mental: -30, money: -10, growth: 0 }, feedback: "學生看著你的石膏顯得不安，你的身體也復原緩慢。" },
+                    { text: "動用存款：用寒暑假的生活預備金賠償對方並修車。", impact: { time: -5, money: -45, mental: -20, growth: 0 }, feedback: "積蓄歸零，生活進入極度不安全的財務紅線。" },
+                    { text: "轉向外送：課餘時間跑外送來補貼這筆兩萬元的意外債務。", impact: { time: -40, money: 10, mental: -25, growth: -15 }, feedback: "體力徹底透支，你連教課時的聲音都在顫抖。" },
+                    { text: "尋求法律：花時間諮詢法律扶助，試圖分擔賠償。", impact: { time: -25, money: -5, mental: -30, growth: 0 }, feedback: "漫長的訴訟程序，讓你在各校間的奔波變得更沉重。" }
                 ]
             },
             {
-                title: "最終的續聘抉擇",
-                desc: "學期末，主任表示鐘點費可能微調下降，且依舊無法提供勞健保。",
-                icon: "<i class='fas fa-door-open'></i>",
+                title: "升學輔導的無酬重擔",
+                desc: "銜轉生面臨高中入學，家長跪求你幫忙填寫複雜的入學報名系統，因為他們看不懂公文且校內註冊組不熟悉學生的背景。",
+                icon: "🎓",
                 options: [
-                    { text: "繼續忍受：接受更差的條件。", impact: { time: -20, mental: -25, money: -20, growth: -20 }, feedback: "你選擇了燃燒，但在這座天花板極低的體制下，你感到窒息。" },
-                    { text: "調整比例：轉往非營利組織。", impact: { time: 10, money: 10, growth: 30, mental: 15 }, feedback: "你決定跳脫教育體系，在公民社會尋求更具尊嚴的專業身分。" },
-                    { text: "毅然離去：轉行做私人通譯。", impact: { time: 20, money: 40, growth: -40, mental: -10 }, feedback: "你選擇了生存。離開校園那天，你知道孩子又少了一個同鄉老師。" },
-                    { text: "微弱抵抗：聯合陳情勞權。", impact: { time: -25, mental: -45, growth: 25, money: 0 }, feedback: "你們成了體制內的「刺頭」，前路艱險，但你第一次感到有聲音。" }
+                    { text: "義不容辭：熬夜研究各區簡章，手把手教孩子操作。", impact: { time: -30, mental: -10, growth: 30, money: 0 }, feedback: "學生錄取了，但你本週的平均時薪已降至不到百元。" },
+                    { text: "推託處理：告知校內註冊組協助，但註冊組表示語言不通。", impact: { time: -10, mental: -25, growth: -20, money: 0 }, feedback: "孩子錯過了報名時機，你成為學生家庭眼中的遺棄者。" },
+                    { text: "簡易協助：只提供簡章網址，不介入具體填報過程。", impact: { time: -5, mental: -15, growth: -10, money: 0 }, feedback: "保護了休息時間，但你看著孩子的未來受阻，充滿無力感。" },
+                    { text: "尋求外部：聯絡非營利組織介入，但需花費大量時間轉介。", impact: { time: -20, money: 0, mental: -10, growth: 10 }, feedback: "找到了專業資源，但繁雜的聯繫仍由你承擔。" }
+                ]
+            },
+            {
+                title: "薪資給付延遲的日常",
+                desc: "因行政流程延宕，某校的鐘點費已兩個月未撥付。你必須先墊付所有跨校移動的油資，而下個月的房租即將到期。",
+                icon: "⌛",
+                options: [
+                    { text: "向校抗議：多次詢問出納組，卻被回以「流程中」。", impact: { time: -10, mental: -30, money: -5, growth: 0 }, feedback: "關係變僵，薪水卻還是沒下來，你感到極度不受尊重。" },
+                    { text: "刷卡度日：支付循環利息來撐過發薪前的空窗期。", impact: { time: 0, money: -30, mental: -25, growth: 0 }, feedback: "財務黑洞擴大，你的熱情被現實帳單完全磨滅。" },
+                    { text: "增加兼職：晚上再去接一份臨時翻譯，換取立即的現金。", impact: { time: -30, money: 15, mental: -25, growth: -10 }, feedback: "身體接近極限，你在課堂上開始無法忍受學生的吵鬧。" },
+                    { text: "節衣縮食：每日僅吃兩餐，減少社交與交通以外的支出。", impact: { time: -15, money: 5, mental: -25, growth: 0 }, feedback: "生理與心理的雙重飢餓，讓教學變得麻木無感。" }
+                ]
+            },
+            {
+                title: "續聘合約的變相要求",
+                desc: "年度合約將屆，行政告知：明年會續聘，但需額外負責「校園母語廣播」且不給鐘點，若不同意則無法保證排課時數。",
+                icon: "🖊️",
+                options: [
+                    { text: "含淚簽字：為了微薄的勞健保延續，接受無理條件。", impact: { time: -20, mental: -40, money: -10, growth: -20 }, feedback: "你留下來了，但你清楚這只是更深層制度剝削的開始。" },
+                    { text: "轉戰私企：放棄教育志業，去貿易公司當行政翻譯。", impact: { time: 10, money: 45, mental: 10, growth: -60 }, feedback: "生活穩定了，但你心中那座連接孩子的橋樑從此斷裂。" },
+                    { text: "堅持界線：拒絕無酬工作，僅簽原合約，聽天由命。", impact: { time: 0, money: -20, mental: -30, growth: 10 }, feedback: "你保住了自尊，但下學期的課表被砍到只剩三分之一。" },
+                    { text: "低頭協商：承諾在教學中加入廣播內容，試圖換取減免。", impact: { time: -15, money: 0, mental: -25, growth: -5 }, feedback: "行政暫時放過你，但教學內容已因行政需求而變形。" }
                 ]
             }
         ];
-
-        let currentStage = 0;
 
         function startGame() {
             document.getElementById('start-screen').classList.add('hidden');
@@ -309,22 +312,18 @@
                 const card = document.getElementById(`card-${f}`);
                 bar.style.width = `${val}%`;
                 
-                if (val < 25) {
+                if (val < 30) {
                     isNearFailure = true;
-                    bar.classList.add('animate-pulse');
                     card.classList.add('stat-low');
-                    bar.style.backgroundColor = '#ef4444';
+                    bar.classList.add('animate-pulse');
                 } else {
-                    bar.classList.remove('animate-pulse');
                     card.classList.remove('stat-low');
-                    const colors = {time:'#f97316', mental:'#ef4444', money:'#10b981', growth:'#3b82f6'};
-                    bar.style.backgroundColor = colors[f];
+                    bar.classList.remove('animate-pulse');
                 }
 
                 if (val <= 0) isGameOver = true;
             });
 
-            // 觸發全局紅燈閃爍
             if (isNearFailure) {
                 document.body.classList.add('is-danger');
             } else {
@@ -348,18 +347,18 @@
             document.getElementById('current-stage').innerText = currentStage + 1;
             document.getElementById('scenario-title').innerText = stage.title;
             document.getElementById('scenario-desc').innerText = stage.desc;
-            document.getElementById('scenario-icon').innerHTML = stage.icon;
+            document.getElementById('scenario-icon').innerText = stage.icon;
 
             const container = document.getElementById('options-container');
             container.innerHTML = '';
 
             stage.options.forEach((opt) => {
                 const btn = document.createElement('button');
-                btn.className = "option-btn w-full text-left p-6 rounded-2xl bg-white shadow-sm flex flex-col justify-between";
+                btn.className = "option-btn";
                 btn.onclick = () => handleChoice(opt);
                 btn.innerHTML = `
-                    <span class="font-bold text-gray-800 mb-2 leading-snug">${opt.text}</span>
-                    <span class="text-xs text-slate-400 font-medium italic">選擇此對策將改變你的處境</span>
+                    <div class="font-bold text-slate-800 text-sm md:text-base leading-snug">${opt.text}</div>
+                    <div class="text-[10px] text-slate-400 mt-1">決策影響：${Object.keys(opt.impact).filter(k => opt.impact[k] !== 0).map(k => (opt.impact[k] > 0 ? '+' : '') + opt.impact[k]).join(', ')}</div>
                 `;
                 container.appendChild(btn);
             });
@@ -374,10 +373,10 @@
 
             const card = document.getElementById('scenario-card');
             card.innerHTML = `
-                <div class="p-16 text-center animate-pulse">
-                    <div class="text-6xl mb-8 text-emerald-500"><i class="fas fa-quote-left"></i></div>
-                    <p class="text-2xl font-bold text-gray-800 mb-10 leading-relaxed">「${option.feedback}」</p>
-                    <button onclick="nextStage()" class="bg-emerald-600 text-white px-16 py-4 rounded-full font-bold shadow-xl hover:bg-emerald-700 transition tracking-widest text-lg">進入下一階段</button>
+                <div class="p-10 text-center">
+                    <div class="text-4xl mb-4 text-slate-300"><i class="fas fa-quote-left"></i></div>
+                    <p class="text-xl font-bold text-slate-700 mb-8 leading-relaxed">「${option.feedback}」</p>
+                    <button onclick="nextStage()" class="bg-slate-800 text-white px-10 py-3 rounded-lg font-bold hover:bg-black transition">面對下一個現實</button>
                 </div>
             `;
         }
@@ -385,20 +384,20 @@
         function nextStage() {
             currentStage++;
             document.getElementById('scenario-card').innerHTML = `
-                <div id="scenario-header-box" class="scenario-header p-8 text-white flex items-center space-x-6 transition-colors duration-500">
-                    <div id="scenario-icon" class="text-5xl opacity-80"></div>
+                <div id="scenario-header-box" class="scenario-header p-6 flex items-center justify-between">
                     <div>
-                        <div class="text-white text-xs font-bold tracking-widest mb-1 opacity-70 uppercase">學期階段 <span id="current-stage"></span> / 8</div>
-                        <h2 id="scenario-title" class="text-2xl font-bold"></h2>
+                        <span class="text-xs font-bold opacity-75 uppercase tracking-wider">Scenario <span id="current-stage"></span> / 10</span>
+                        <h2 id="scenario-title" class="text-xl font-bold mt-1"></h2>
                     </div>
+                    <div id="scenario-icon" class="text-3xl opacity-50"></div>
                 </div>
-                <div class="p-8 md:p-10">
-                    <p id="scenario-desc" class="text-gray-700 mb-10 leading-relaxed text-xl"></p>
-                    <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+                <div class="p-6">
+                    <div id="scenario-desc" class="text-slate-600 mb-8 leading-relaxed text-lg"></div>
+                    <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
                 </div>
             `;
             renderStage();
-            updateBars(); // 確保換關時也檢查狀態
+            updateBars();
         }
 
         function endGame(win) {
@@ -413,27 +412,27 @@
             const statsDiv = document.getElementById('result-stats');
 
             if (win) {
-                icon.innerHTML = "<i class='fas fa-bridge text-emerald-600'></i>";
-                title.innerText = "你是這座體制邊緣的守護者";
-                desc.innerText = "雖然這條路看不見終點，你也深知身分限制的困境，但你撐過了一個學期。你的存在，讓這群孩子不至於在主流校園中徹底溺水。";
+                icon.innerHTML = "🕊️";
+                title.innerText = "疲憊卻尚未熄滅的擺渡人";
+                desc.innerText = "你完成了一整年的隨班翻譯洗禮。儘管薪水微薄、時數不穩、福利欠缺，你依然在縫隙中守住了對孩子的承諾。然而，制度的結構性問題，依舊在等待被正視的那天。";
             } else {
-                icon.innerHTML = "<i class='fas fa-ban text-red-500'></i>";
-                title.innerText = "擺渡之路戛然而止";
+                icon.innerHTML = "🚫";
+                title.innerText = "制度性崩潰：模擬終止";
                 
                 let reason = "";
-                if (stats.time <= 0) reason = "身體崩潰：你因為過度奔波與缺乏保障的長途騎行而體力透支。";
-                else if (stats.mental <= 0) reason = "心理瓦解：長期處於體制邊緣與歧視環境，你對教育的熱情已燃燒殆盡。";
-                else if (stats.money <= 0) reason = "經濟崩解：微薄且不穩定的總收入已無法支撐最基本的生活開銷。";
-                else if (stats.growth <= 0) reason = "身分絕望：你意識到在目前的體制下永遠只有被工具化的份，選擇徹底轉職。";
+                if (stats.time <= 0) reason = "身體崩潰：長期的跨區奔波與意外後遺症，讓你已無法負荷教學現場的體力要求。";
+                else if (stats.mental <= 0) reason = "情緒枯竭：在制度的邊緣化與家長沉重的生活需求間，你的心理健康已亮起紅燈。";
+                else if (stats.money <= 0) reason = "經濟破產：不穩定的鐘點、延遲的撥款與突發的車損，讓你已無法支付下個月的房租。";
+                else if (stats.growth <= 0) reason = "專業放棄：你意識到在目前的體系中，你的專業不被尊重，你決定帶著這身技能離開校園。";
 
-                desc.innerText = `${reason} 你的離開，印證了這套制度對於跨國扶助教師的漠視。`;
+                desc.innerText = reason;
             }
 
             statsDiv.innerHTML = `
-                <div class="bg-orange-50 p-4 rounded-xl border border-orange-100 text-orange-700 font-bold">體力: ${stats.time}%</div>
-                <div class="bg-red-50 p-4 rounded-xl border border-red-100 text-red-700 font-bold">情緒: ${stats.mental}%</div>
-                <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-100 text-emerald-700 font-bold">經濟: ${stats.money}%</div>
-                <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 text-blue-700 font-bold">認同: ${stats.growth}%</div>
+                <div class="p-3 bg-orange-50 rounded-lg text-orange-700 text-sm font-bold">體力: ${stats.time}%</div>
+                <div class="p-3 bg-red-50 rounded-lg text-red-700 text-sm font-bold">情緒: ${stats.mental}%</div>
+                <div class="p-3 bg-green-50 rounded-lg text-green-700 text-sm font-bold">經濟: ${stats.money}%</div>
+                <div class="p-3 bg-blue-50 rounded-lg text-blue-700 text-sm font-bold">認同: ${stats.growth}%</div>
             `;
         }
     </script>
